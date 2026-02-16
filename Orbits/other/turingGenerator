@@ -1,0 +1,13 @@
+this.inlets = 7;
+this.outlets = 2;
+
+var pattern = [0];
+
+function note_list(a) {
+	post(arguments[0]);
+	post(arguments.length);
+}
+
+function pattern_len(n) {
+	post("Pattern length: " + this.pattern + "\n");
+}

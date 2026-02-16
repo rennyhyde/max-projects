@@ -1,0 +1,116 @@
+{
+	"patcher" : 	{
+		"fileversion" : 1,
+		"appversion" : 		{
+			"major" : 8,
+			"minor" : 6,
+			"revision" : 2,
+			"architecture" : "x64",
+			"modernui" : 1
+		}
+,
+		"classnamespace" : "dsp.gen",
+		"rect" : [ 675.0, 84.0, 570.0, 633.0 ],
+		"bglocked" : 0,
+		"openinpresentation" : 0,
+		"default_fontsize" : 12.0,
+		"default_fontface" : 0,
+		"default_fontname" : "Arial",
+		"gridonopen" : 1,
+		"gridsize" : [ 15.0, 15.0 ],
+		"gridsnaponopen" : 1,
+		"objectsnaponopen" : 1,
+		"statusbarvisible" : 2,
+		"toolbarvisible" : 1,
+		"lefttoolbarpinned" : 0,
+		"toptoolbarpinned" : 0,
+		"righttoolbarpinned" : 0,
+		"bottomtoolbarpinned" : 0,
+		"toolbars_unpinned_last_save" : 0,
+		"tallnewobj" : 0,
+		"boxanimatetime" : 200,
+		"enablehscroll" : 1,
+		"enablevscroll" : 1,
+		"devicewidth" : 0.0,
+		"description" : "",
+		"digest" : "",
+		"tags" : "",
+		"style" : "",
+		"subpatcher_template" : "",
+		"assistshowspatchername" : 0,
+		"boxes" : [ 			{
+				"box" : 				{
+					"code" : "History ecc(0.5);\nHistory precision_sec(SAMPLERATE);\nHistory calc_phase(1);\nData true_anomaly(precision_sec, 1);\n\nM = in1 * PI;\necc = clamp(in2, 0.001, 0.999);\nn = wrap(int(in1 * precision_sec), 0, precision_sec - 1);\n\nif (calc_phase == 1) {\r\n\tEE = 0;\r\n\tif (ecc < 0.8) {\r\n\t\tEE = M + ecc*sin(M);\r\n\t}\r\n\tif (ecc >= 0.8) {\n    // Machin initial guess\n    nn = sqrt(5 + sqrt(16 + 9/ecc));\n    a = nn*(ecc*(pow(nn, 2) - 1) + 1) / 6;\n    c = nn*(1 - ecc);\n    d = -M;\n    p = c / a;\n    q = d / a;\n    k = sqrt(pow(q,2)/4 + pow(p,3)/27);\n    s = pow(-q/2 - k, 1/3) + pow(-q/2 + k, 1/3);\n    EE = nn * asin(s);\r\n\t}\r\n\r\n\t//EE = M;\n\n    // Newton refine\n    tolerance = 0.000001;\n    count = 0;\n    while (abs(EE - ecc*sin(EE) - M) > tolerance && count < 20) {\n        EE = EE - ((EE - ecc*sin(EE) - M) / (1 - ecc*cos(EE)));\n        count += 1;\n    }\n\n    poke(true_anomaly, EE/PI, n);\n}\n\n// Output\nthetanorm = peek(true_anomaly, n);\nout1 = thetanorm;\n",
+					"fontface" : 0,
+					"fontname" : "<Monospaced>",
+					"fontsize" : 12.0,
+					"id" : "obj-5",
+					"maxclass" : "codebox",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 50.0, 96.606061339378357, 519.69700562953949, 271.212139964103699 ]
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-1",
+					"maxclass" : "newobj",
+					"numinlets" : 0,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 50.0, 14.0, 28.0, 22.0 ],
+					"text" : "in 1"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-2",
+					"maxclass" : "newobj",
+					"numinlets" : 0,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 550.69700562953949, 14.0, 28.0, 22.0 ],
+					"text" : "in 2"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-4",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 50.0, 400.0, 35.0, 22.0 ],
+					"text" : "out 1"
+				}
+
+			}
+ ],
+		"lines" : [ 			{
+				"patchline" : 				{
+					"destination" : [ "obj-5", 0 ],
+					"source" : [ "obj-1", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-5", 1 ],
+					"source" : [ "obj-2", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-4", 0 ],
+					"source" : [ "obj-5", 0 ]
+				}
+
+			}
+ ]
+	}
+
+}
