@@ -1,8 +1,8 @@
 {
-	"name" : "Make-N-Prototype",
+	"name" : "Fracture-Prototype",
 	"version" : 1,
 	"creationdate" : 3851935575,
-	"modificationdate" : 3852477162,
+	"modificationdate" : 3854109608,
 	"viewrect" : [ 25.0, 107.0, 300.0, 500.0 ],
 	"autoorganize" : 1,
 	"hideprojectwindow" : 0,
@@ -20,6 +20,15 @@
 				"kind" : "patcher",
 				"local" : 1
 			}
+,
+			"supersaw_test.maxpat" : 			{
+				"kind" : "patcher",
+				"local" : 1
+			}
+
+		}
+,
+		"code" : 		{
 
 		}
 
